@@ -11,6 +11,9 @@ import { removeTask, updateTask } from '@/src/store/reducers/tasks'
 import responsive from '@/src/constants/scalling'
 import { Ionicons } from '@expo/vector-icons'
 import dayjs from 'dayjs'
+import { zodResolver } from '@hookform/resolvers/zod'
+import { taskSchema } from '@/src/types/validations'
+
 
 const Page = () => {
   const { id } = useLocalSearchParams()
@@ -30,11 +33,18 @@ const Page = () => {
   )
 
   const form = useForm<Task>({
-    defaultValues: task
+    defaultValues: task,
+    resolver: zodResolver(taskSchema)
   })
 
   const handleSubmit = form.handleSubmit((data) => {
-    dispatch(updateTask({ ...data, id: task.id }))
+
+    const newTask = {
+      ...task,
+      ...data,
+    }
+
+    dispatch(updateTask(newTask))
     setEditMode(false)
   })
 
@@ -42,6 +52,15 @@ const Page = () => {
     dispatch(removeTask(task.id))
     router.back()
   }
+
+  const formatDate = (dateString: string) => {
+    const parsedDate = dayjs(dateString, 'DD/MM/YYYY HH:mm');
+    if (!parsedDate.isValid()) {
+      console.error('Invalid date format:', dateString);
+      return 'Invalid date';
+    }
+    return parsedDate.format('MMM D, YYYY h:mm A');
+  };
 
   const renderViewMode = () => (
     <View style={styles.viewContainer}>
@@ -58,7 +77,7 @@ const Page = () => {
       <View style={styles.section}>
         <Text style={[styles.label, { color: secondaryTextColor }]}>Due Date</Text>
         <Text style={[styles.value, { color: textColor }]}>
-          {dayjs(task.dueDate).format('MMM D, YYYY h:mm A')}
+          {formatDate(task.dueDate)}
         </Text>
       </View>
 

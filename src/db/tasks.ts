@@ -26,6 +26,7 @@ export const getTasks = async (): Promise<DBTask[]> => {
 
 export const updateTaskDB = async (task: DBTask): Promise<void> => {
     const db = await getDB();
+    console.log('updating task:', task);
     await db.runAsync(`
         UPDATE tasks
         SET title = ?, description = ?, completed = ?, priority = ?, dueDate = ?
@@ -37,7 +38,7 @@ export const updateTaskDB = async (task: DBTask): Promise<void> => {
         task.priority,
         task.dueDate,
         task.id,
-    ]);
+    ]).catch(err => console.log(err));
 }
 
 export const deleteTask = async (id: string): Promise<void> => {
