@@ -9,6 +9,8 @@ import CustomDateTimePicker from '@/src/components/general/CustomDateTimePicker'
 import CustomInput from '@/src/components/general/CustomInput'
 import { useDispatch, useSelector } from 'react-redux'
 import { addTask } from '@/src/store/reducers/tasks'
+import { taskSchema } from '@/src/types/validations'
+import { zodResolver } from '@hookform/resolvers/zod'
 
 const dummyData = {
   title: 'Task 1',
@@ -24,7 +26,8 @@ const Page = () => {
   const dispatch = useDispatch()
 
   const form = useForm<Task>({
-    defaultValues: dummyData,
+    // defaultValues: dummyData,
+    resolver: zodResolver(taskSchema)
   })
 
   const handleSubmit = form.handleSubmit((data) => {
