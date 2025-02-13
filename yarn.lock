@@ -3347,6 +3347,13 @@ expo-constants@~17.0.5:
     "@expo/config" "~10.0.8"
     "@expo/env" "~0.4.1"
 
+expo-drizzle-studio-plugin@^0.1.1:
+  version "0.1.1"
+  resolved "https://registry.yarnpkg.com/expo-drizzle-studio-plugin/-/expo-drizzle-studio-plugin-0.1.1.tgz#991c01414f9a6e15df2d495c6ef3f9834f7c0f78"
+  integrity sha512-OfV79+crmAIMK0jlwmVOMRXdss5rEHtA8vDALPLkjisDSAVEwElzx4OEGuUG/Pf8QlTGUEr7kK3WtCoQvWzo8g==
+  dependencies:
+    expo-sqlite "^15.0.3"
+
 expo-file-system@~18.0.10:
   version "18.0.10"
   resolved "https://registry.yarnpkg.com/expo-file-system/-/expo-file-system-18.0.10.tgz#b4b99d0e76f960b46ef1f39bcd0355c05fabf7bc"
@@ -3425,6 +3432,11 @@ expo-splash-screen@~0.29.21:
   integrity sha512-7uZ+qvIuNcvrvrLIklW+Wbt6llPuCj6LKYjrMu+GOX8s///laldS4TGiMAbqcE7fmfCzQ8ffgfY7xhxRourhcA==
   dependencies:
     "@expo/prebuild-config" "^8.0.25"
+
+expo-sqlite@^15.0.3, expo-sqlite@~15.1.2:
+  version "15.1.2"
+  resolved "https://registry.yarnpkg.com/expo-sqlite/-/expo-sqlite-15.1.2.tgz#374596a046dfe1012cc8bf933f908de42e0fafa9"
+  integrity sha512-xe+v56ts6GWJoNXLpWBQJmIPd7K1Bk9tmWc2b0nV5yUjqXZX3lbTYm8QhXEqUJxYu87o2GSkNqAqNKeDbMUXGQ==
 
 expo-status-bar@~2.0.1:
   version "2.0.1"

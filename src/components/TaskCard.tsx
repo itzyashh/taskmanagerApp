@@ -6,6 +6,7 @@ import responsive from '../constants/scalling'
 import { Ionicons } from '@expo/vector-icons'
 import dayjs from 'dayjs'
 import { router } from 'expo-router'
+import Swipeable from 'react-native-gesture-handler/ReanimatedSwipeable';
 
 interface TaskCardProps {
   task: Task

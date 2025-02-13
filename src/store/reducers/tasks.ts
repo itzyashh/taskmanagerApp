@@ -1,3 +1,4 @@
+import { deleteTask, getTasks, saveTask } from '@/src/db/tasks';
 import { Task } from '@/src/types/task';
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 
@@ -17,9 +18,11 @@ const Tasks = createSlice({
     reducers: {
         addTask: (state, action: PayloadAction<Task>) => {
             console.log('adding task2:', action.payload);
+            saveTask(action.payload);
             state.tasks.push(action.payload);
         },
         removeTask: (state, action: PayloadAction<string>) => {
+            deleteTask(action.payload);
             state.tasks = state.tasks.filter(task => task.id !== action.payload);
         },
         updateTask: (state, action: PayloadAction<Task>) => {
@@ -34,8 +37,11 @@ const Tasks = createSlice({
                 task.completed = !task.completed;
             }
         },
+        setTasks: (state, action: PayloadAction<Task[]>) => {
+            state.tasks = action.payload;
+        }
     },
 });
 
-export const { addTask, removeTask, updateTask, toggleTaskComplete } = Tasks.actions;
+export const { addTask, removeTask, updateTask, toggleTaskComplete, setTasks } = Tasks.actions;
 export default Tasks.reducer;

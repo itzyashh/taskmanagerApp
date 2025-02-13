@@ -25,17 +25,19 @@ const Page = () => {
       options={{ 
         headerShown: true,
         headerTitle: "Tasks",
+        headerTransparent: false,
         headerSearchBarOptions: {
           placeholder: "Search for tasks",
           obscureBackground: true,
           headerIconColor: useThemeColor({ }, "textPrimary"),
           onChangeText(e) {
-            setSearch(e)
+            console.log('Search:', e.nativeEvent.text)
+            setSearch(e.nativeEvent.text)
           },
         }
       }}
       name="index" />
-      <View style={{marginTop: headerHeight}}>
+      <View style={{}}>
       <TasksList tasks={tasks} search={search} />
       </View>
       <FloatingButton onPress={()=>router.push('/tasks/add')} />
