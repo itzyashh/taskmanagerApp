@@ -1,14 +1,19 @@
 import { configureStore } from '@reduxjs/toolkit';
-import Task from './reducers/tasks';
+import tasksReducer from './reducers/tasks';
 
-const store = configureStore({
-    reducer: {
-        tasks: Task,
-    },
+export const store = configureStore({
+  reducer: {
+    tasks: tasksReducer,
+  },
 });
 
-// Infer the `RootState` and `AppDispatch` types from the store itself
+// Type definitions
 export type RootState = ReturnType<typeof store.getState>;
 export type AppDispatch = typeof store.dispatch;
+
+// Typed selectors
+export const selectTasks = (state: RootState) => state.tasks.tasks;
+export const selectTaskById = (state: RootState, taskId: string) => 
+  state.tasks.tasks.find(task => task.id === taskId);
 
 export default store;

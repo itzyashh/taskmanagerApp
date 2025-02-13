@@ -1,29 +1,47 @@
 import { Alert, StyleSheet, TouchableOpacity } from 'react-native'
 import React from 'react'
-import { Stack } from 'expo-router'
+import { router, Stack } from 'expo-router'
 import { Text, View, useThemeColor } from '@/src/components/general/Themed'
 import responsive from '@/src/constants/scalling'
 import { FormProvider, useForm } from 'react-hook-form'
 import { Task } from '@/src/types/task'
 import CustomDateTimePicker from '@/src/components/general/CustomDateTimePicker'
 import CustomInput from '@/src/components/general/CustomInput'
+import { useDispatch, useSelector } from 'react-redux'
+import { addTask } from '@/src/store/reducers/tasks'
+
+const dummyData = {
+  title: 'Task 1',
+  description: 'This is a task',
+  dueDate: new Date().toISOString(),
+}
 
 const Page = () => {
   // Get theme colors
   const surfaceBackground = useThemeColor({}, 'surfaceBackground')
   const textColor = useThemeColor({}, 'textPrimary')
   const primaryColor = useThemeColor({}, 'primary')
+  const dispatch = useDispatch()
+
+  const store = useSelector((state: any) => state)
+
+  console.log('store:', store)
 
   const form = useForm<Task>({
-    defaultValues: {
-      title: '',
-      description: '',
-      dueDate: '',
-    },
+    defaultValues: dummyData,
   })
 
   const handleSubmit = form.handleSubmit((data) => {
-    console.log(data)
+    const task: Task = {
+      ...data,
+      id: Math.random().toString(36).substr(2, 9),
+      completed: false,
+      createdAt: new Date().toISOString(),
+      priority: 'low',
+    }
+    
+    dispatch(addTask(task))
+    router.back()
   })
 
   return (
