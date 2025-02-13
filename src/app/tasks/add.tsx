@@ -1,95 +1,72 @@
-import { StyleSheet, TextInput, TouchableOpacity } from 'react-native'
-import React, { useState } from 'react'
+import { Alert, StyleSheet, TouchableOpacity } from 'react-native'
+import React from 'react'
 import { Stack } from 'expo-router'
 import { Text, View, useThemeColor } from '@/src/components/general/Themed'
 import responsive from '@/src/constants/scalling'
-import { Ionicons } from '@expo/vector-icons'
+import { FormProvider, useForm } from 'react-hook-form'
+import { Task } from '@/src/types/task'
+import CustomDateTimePicker from '@/src/components/general/CustomDateTimePicker'
+import CustomInput from '@/src/components/general/CustomInput'
 
 const Page = () => {
-  const [title, setTitle] = useState('')
-  const [description, setDescription] = useState('')
-  const [dueDate, setDueDate] = useState('')
-
   // Get theme colors
-  const backgroundColor = useThemeColor({}, 'background')
   const surfaceBackground = useThemeColor({}, 'surfaceBackground')
   const textColor = useThemeColor({}, 'textPrimary')
-  const placeholderColor = useThemeColor({}, 'textSecondary')
   const primaryColor = useThemeColor({}, 'primary')
-  const borderColor = useThemeColor({}, 'border')
 
-  const handleSubmit = () => {
-    // Handle task creation logic here
-    console.log({ title, description, dueDate })
-  }
+  const form = useForm<Task>({
+    defaultValues: {
+      title: '',
+      description: '',
+      dueDate: '',
+    },
+  })
+
+  const handleSubmit = form.handleSubmit((data) => {
+    console.log(data)
+  })
 
   return (
     <View style={[styles.container, { backgroundColor: surfaceBackground }]}>
-      <Stack.Screen 
-        name="add" 
-        options={{ 
-          headerTitle: "Add Task",
-          headerShadowVisible: false,
-          headerStyle: { backgroundColor: surfaceBackground },
-          headerTintColor: textColor,
-        }} 
-      />
-      
-      <View style={[styles.form, { backgroundColor: surfaceBackground }]}>
-        <View style={styles.inputContainer}>
-          <Text style={[styles.label, { color: textColor }]}>Task Title</Text>
-          <TextInput
-            style={[styles.input, { 
-              backgroundColor: backgroundColor,
-              borderColor: borderColor,
-              color: textColor
-            }]}
-            value={title}
-            onChangeText={setTitle}
+      <FormProvider {...form}>
+        <Stack.Screen 
+          name="add" 
+          options={{ 
+            headerTitle: "Add Task",
+            headerShadowVisible: false,
+            headerStyle: { backgroundColor: surfaceBackground },
+            headerTintColor: textColor,
+          }} 
+        />
+        
+        <View style={[styles.form, { backgroundColor: surfaceBackground }]}>
+          <CustomInput
+            name="title"
+            label="Task Title"
             placeholder="Enter task title"
-            placeholderTextColor={placeholderColor}
           />
-        </View>
 
-        <View style={styles.inputContainer}>
-          <Text style={[styles.label, { color: textColor }]}>Description</Text>
-          <TextInput
-            style={[styles.input, styles.textArea, { 
-              backgroundColor: backgroundColor,
-              borderColor: borderColor,
-              color: textColor
-            }]}
-            value={description}
-            onChangeText={setDescription}
+          <CustomInput
+            name="description"
+            label="Description"
             placeholder="Enter task description"
-            placeholderTextColor={placeholderColor}
             multiline
-            numberOfLines={4}
           />
-        </View>
 
-        <View style={styles.inputContainer}>
-          <Text style={[styles.label, { color: textColor }]}>Due Date</Text>
-          <TextInput
-            style={[styles.input, { 
-              backgroundColor: backgroundColor,
-              borderColor: borderColor,
-              color: textColor
-            }]}
-            value={dueDate}
-            onChangeText={setDueDate}
-            placeholder="Select due date"
-            placeholderTextColor={placeholderColor}
+          <CustomDateTimePicker
+            label="Due Date"
+            mode="datetime"
+            name="dueDate"
           />
-        </View>
 
-        <TouchableOpacity 
-          style={[styles.button, { backgroundColor: primaryColor }]}
-          onPress={handleSubmit}
-        >
-          <Text style={styles.buttonText}>Create Task</Text>
-        </TouchableOpacity>
-      </View>
+          <TouchableOpacity 
+            style={[styles.button, { backgroundColor: primaryColor }]}
+            onPress={handleSubmit}
+          >
+            <Text style={styles.buttonText}>Create Task</Text>
+          </TouchableOpacity>
+        </View>
+      </FormProvider>
     </View>
   )
 }
