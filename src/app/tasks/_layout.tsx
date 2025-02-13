@@ -8,7 +8,7 @@ const TaskLayout = () => {
         <Stack.Screen name="add" options={{
 
         }} />
-        <Stack.Screen name="edit" />
+        <Stack.Screen name={"[id]"} />
     </Stack>
   )
 }

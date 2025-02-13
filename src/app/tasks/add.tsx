@@ -23,10 +23,6 @@ const Page = () => {
   const primaryColor = useThemeColor({}, 'primary')
   const dispatch = useDispatch()
 
-  const store = useSelector((state: any) => state)
-
-  console.log('store:', store)
-
   const form = useForm<Task>({
     defaultValues: dummyData,
   })

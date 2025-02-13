@@ -5,23 +5,28 @@ import { Task } from '../types/task'
 import responsive from '../constants/scalling'
 import { Ionicons } from '@expo/vector-icons'
 import dayjs from 'dayjs'
+import { router } from 'expo-router'
 
 interface TaskCardProps {
   task: Task
-  onPress?: () => void
   onToggleComplete?: () => void
 }
 
-const TaskCard: FC<TaskCardProps> = ({ task, onPress, onToggleComplete }) => {
+const TaskCard: FC<TaskCardProps> = ({ task, onToggleComplete }) => {
   const backgroundColor = useThemeColor({}, 'cardBackground')
   const textColor = useThemeColor({}, 'textPrimary')
   const secondaryTextColor = useThemeColor({}, 'textSecondary')
   const primaryColor = useThemeColor({}, 'primary')
 
+  const onTap = () => {
+    console.log('Task tapped:', task.id)
+    router.push(`/tasks/${task.id}`)
+  }
+
   return (
     <TouchableOpacity 
       style={[styles.container, { backgroundColor }]} 
-      onPress={onPress}
+      onPress={onTap}
       activeOpacity={0.7}
     >
       <TouchableOpacity 
@@ -47,15 +52,6 @@ const TaskCard: FC<TaskCardProps> = ({ task, onPress, onToggleComplete }) => {
         >
           {task.title}
         </Text>
-        
-        {task.description ? (
-          <Text 
-            style={[styles.description, { color: secondaryTextColor }]}
-            numberOfLines={2}
-          >
-            {task.description}
-          </Text>
-        ) : null}
         
         <Text style={[styles.date, { color: secondaryTextColor }]}>
           Due: {dayjs(task.dueDate).format('MMM D, YYYY h:mm A')}
@@ -87,15 +83,12 @@ const styles = StyleSheet.create({
   },
   content: {
     flex: 1,
+    backgroundColor: 'transparent',
   },
   title: {
     fontSize: responsive.fontSize(16),
     fontWeight: '600',
     marginBottom: responsive.margin(4),
-  },
-  description: {
-    fontSize: responsive.fontSize(14),
-    marginBottom: responsive.margin(8),
   },
   date: {
     fontSize: responsive.fontSize(12),

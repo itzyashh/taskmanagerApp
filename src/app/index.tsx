@@ -1,5 +1,5 @@
 
-import React, { useEffect } from 'react'
+import React, { useEffect, useState } from 'react'
 import { Text, useThemeColor, View } from '../components/general/Themed'
 import { SafeAreaView } from 'react-native-safe-area-context'
 import { StyleSheet } from 'react-native'
@@ -16,6 +16,9 @@ const Page = () => {
   const tasks = useSelector(selectTasks)
   console.log('Tasks here:', tasks)
   const headerHeight = useHeaderHeight()
+
+  const [search, setSearch] = useState('')
+
   return (
     <View style={styles.container}>
       <Stack.Screen 
@@ -26,11 +29,14 @@ const Page = () => {
           placeholder: "Search for tasks",
           obscureBackground: true,
           headerIconColor: useThemeColor({ }, "textPrimary"),
+          onChangeText(e) {
+            setSearch(e)
+          },
         }
       }}
       name="index" />
       <View style={{marginTop: headerHeight}}>
-      <TasksList tasks={tasks} />
+      <TasksList tasks={tasks} search={search} />
       </View>
       <FloatingButton onPress={()=>router.push('/tasks/add')} />
     </View>
