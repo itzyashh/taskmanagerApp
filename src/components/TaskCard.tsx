@@ -7,24 +7,62 @@ import { Ionicons } from '@expo/vector-icons'
 import dayjs from 'dayjs'
 import { router } from 'expo-router'
 import Swipeable from 'react-native-gesture-handler/ReanimatedSwipeable';
+import { useDispatch } from 'react-redux'
+import { removeTask, toggleTaskComplete } from '../store/reducers/tasks'
+// Add at the top of your file
 
+import customParseFormat from 'dayjs/plugin/customParseFormat';
+
+dayjs.extend(customParseFormat);
 interface TaskCardProps {
   task: Task
-  onToggleComplete?: () => void
 }
 
-const TaskCard: FC<TaskCardProps> = ({ task, onToggleComplete }) => {
+const TaskCard: FC<TaskCardProps> = ({ task }) => {
   const backgroundColor = useThemeColor({}, 'cardBackground')
   const textColor = useThemeColor({}, 'textPrimary')
   const secondaryTextColor = useThemeColor({}, 'textSecondary')
   const primaryColor = useThemeColor({}, 'primary')
+
+  const dispatch = useDispatch()
+
 
   const onTap = () => {
     console.log('Task tapped:', task.id)
     router.push(`/tasks/${task.id}`)
   }
 
+  const onToggleComplete = () => {
+    dispatch(toggleTaskComplete(task.id))
+  }
+
+  const onDelete = () => {
+    dispatch(removeTask(task.id))
+    }
+
+const formattedDate = () => {
+  console.log('task.dueDate:', task.dueDate);
+  
+  // First parse the date string using the correct format
+  const parsedDate = dayjs(task.dueDate, 'DD/MM/YYYY HH:mm');
+  
+  // Check if the date is valid
+  if (!parsedDate.isValid()) {
+    console.error('Invalid date format:', task.dueDate);
+    return 'Invalid date';
+  }
+  
+  // Format the date in a readable format
+  return parsedDate.format('MMM D, YYYY h:mm A');
+}
+
   return (
+    <Swipeable
+      renderRightActions={() => (
+        <TouchableOpacity style={styles.deleteAction} onPress={onDelete}>
+          <Ionicons name="trash" size={24} color="white" />
+        </TouchableOpacity>
+      )}>
     <TouchableOpacity 
       style={[styles.container, { backgroundColor }]} 
       onPress={onTap}
@@ -55,10 +93,11 @@ const TaskCard: FC<TaskCardProps> = ({ task, onToggleComplete }) => {
         </Text>
         
         <Text style={[styles.date, { color: secondaryTextColor }]}>
-          Due: {dayjs(task.dueDate).format('MMM D, YYYY h:mm A')}
+          Due: {formattedDate()}
         </Text>
       </View>
     </TouchableOpacity>
+    </Swipeable>
   )
 }
 
@@ -94,6 +133,12 @@ const styles = StyleSheet.create({
   date: {
     fontSize: responsive.fontSize(12),
   },
+    deleteAction: {
+
+        justifyContent: 'center',
+        alignItems: 'center',
+        width: responsive.width(80),
+    },
 })
 
 export default TaskCard

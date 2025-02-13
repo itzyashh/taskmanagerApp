@@ -24,7 +24,7 @@ export const getTasks = async (): Promise<DBTask[]> => {
     return tasks;
 };
 
-export const updateTask = async (task: DBTask): Promise<void> => {
+export const updateTaskDB = async (task: DBTask): Promise<void> => {
     const db = await getDB();
     await db.runAsync(`
         UPDATE tasks
@@ -44,6 +44,15 @@ export const deleteTask = async (id: string): Promise<void> => {
     const db = await getDB();
     await db.runAsync(`
         DELETE FROM tasks
+        WHERE id = ?;
+    `, [id]);
+}
+
+export const onTaskComplete = async (id: string): Promise<void> => {
+    const db = await getDB();
+    await db.runAsync(`
+        UPDATE tasks
+        SET completed = 1
         WHERE id = ?;
     `, [id]);
 }

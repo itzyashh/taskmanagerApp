@@ -1,4 +1,4 @@
-import { deleteTask, getTasks, saveTask } from '@/src/db/tasks';
+import { deleteTask, getTasks, onTaskComplete, saveTask, updateTaskDB } from '@/src/db/tasks';
 import { Task } from '@/src/types/task';
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 
@@ -28,12 +28,14 @@ const Tasks = createSlice({
         updateTask: (state, action: PayloadAction<Task>) => {
             const index = state.tasks.findIndex(task => task.id === action.payload.id);
             if (index !== -1) {
+                updateTaskDB(action.payload);
                 state.tasks[index] = action.payload;
             }
         },
         toggleTaskComplete: (state, action: PayloadAction<string>) => {
             const task = state.tasks.find(task => task.id === action.payload);
             if (task) {
+                onTaskComplete(action.payload);
                 task.completed = !task.completed;
             }
         },
